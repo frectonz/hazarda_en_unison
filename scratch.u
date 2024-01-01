@@ -1,0 +1,110 @@
+mySoupCount : Text -> Nat
+mySoupCount name =
+  match name with
+    "Chicken Noodle" -> 4
+    "Miso"           -> 7
+    "Borscht"        -> 5
+    "Chowder"        -> 5
+    -- _ -> 0
+
+---
+
+-- thunks
+
+a    = '"hello"
+a' _ = "hello"
+a''  = do "hello"
+
+---
+
+isOdd n = n |> Nat.isEven |> Boolean.not
+isOdd' = Boolean.not << Nat.isEven
+isOdd'' = Nat.isEven >> Boolean.not
+isOdd''' n = Boolean.not <| Nat.isEven n
+
+sizeIsOdd : Text -> Boolean
+sizeIsOdd = Boolean.not << Nat.isEven << Text.size
+
+sizeIsOdd' : Text -> Boolean
+sizeIsOdd' = Text.size >> Nat.isEven >> Boolean.not
+
+---
+
+x ^ y = Nat.pow x y
+
+> 2 ^ 10
+
+---
+
+addOne : Nat -> Nat
+addOne n = 
+    use Nat +
+    n + 1
+
+addNums : Nat -> Nat -> Nat
+addNums n1 n2 = 
+    use Nat +
+    n1 + n2
+
+addOne' = addNums 1
+
+> addOne' 2
+
+---
+
+> Map.fromList [ (1, "one"), (2, "two"), (3, "three") ]
+> Set.fromList [ 1, 2, 2, 3 ]
+
+---
+
+desserts : [Text]
+desserts = ["Eclair", "Peach cobbler", "Ice cream"]
+
+last = cases
+    [] -> None
+    [ x ] -> Some x
+    _ +: tl -> last tl
+
+last' xs = xs |> List.reverse |> List.head
+
+> last []
+> last desserts
+> last' desserts
+
+penultimate = cases
+    [] -> None
+    [ x, y ] -> Some x
+    _ +: tl -> penultimate tl
+
+> penultimate desserts
+
+elementAt' n c = cases
+    [] -> None
+    h +: tl -> 
+        if c == n then 
+            Some h
+        else elementAt' n (c + 1) tl
+
+elementAt n lst = elementAt' n 1 lst
+
+> elementAt 3 desserts
+
+---
+
+> ?a
+> 5 Nat.+ 5
+> -4 + -9
+> 3.14
+> true || false
+> true && false
+
+---
+
+nums = (7, 1, 500)
+
+sum : (Nat, Nat, Nat) -> Nat
+sum ns = 
+    let (one, two, three) = ns
+        one + two + three
+
+> sum nums
